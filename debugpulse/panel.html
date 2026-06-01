@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DebugPulse</title>
+    <link rel="stylesheet" href="styles/panel.css">
+  </head>
+  <body class="panel-body">
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="icons/icon48.png" alt="" class="brand-icon">
+          <div>
+            <h1>DebugPulse</h1>
+            <p>AI-powered API failure diagnostics</p>
+          </div>
+        </div>
+        <nav class="filters" aria-label="Failure filters">
+          <button class="filter-button active" data-filter="all">All</button>
+          <button class="filter-button" data-filter="5xx">5xx</button>
+          <button class="filter-button" data-filter="4xx">4xx</button>
+          <button class="filter-button" data-filter="network">Network Errors</button>
+        </nav>
+        <div class="top-actions">
+          <button id="clearAll" class="ghost-button">Clear all</button>
+          <button id="settingsToggle" class="icon-button" title="Settings" aria-label="Settings">⚙</button>
+        </div>
+      </header>
+
+      <aside id="settingsDrawer" class="settings-drawer hidden">
+        <div class="settings-card">
+          <div class="settings-head">
+            <h2>Groq Settings</h2>
+            <button id="settingsClose" class="icon-button" aria-label="Close settings">×</button>
+          </div>
+          <label for="groqApiKey">Groq API Key</label>
+          <div class="input-row">
+            <input id="groqApiKey" type="password" autocomplete="off" placeholder="gsk_...">
+            <button id="toggleKey" class="ghost-button">Show</button>
+          </div>
+          <div class="settings-actions">
+            <button id="saveKey" class="primary-button">Save key</button>
+            <button id="testConnection" class="ghost-button">Test connection</button>
+          </div>
+          <p id="settingsStatus" class="settings-status"></p>
+        </div>
+      </aside>
+
+      <main class="layout">
+        <section class="failure-list-panel">
+          <div class="list-head">
+            <h2>Failed Requests</h2>
+            <span id="failureCount">0</span>
+          </div>
+          <div id="failureList" class="failure-list"></div>
+          <div id="emptyState" class="empty-state">
+            <div class="pulse-illustration" aria-hidden="true">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="42"></circle>
+                <path d="M22 62h18l9-22 16 48 12-26h21"></path>
+              </svg>
+            </div>
+            <h2>No API failures detected</h2>
+            <p>DebugPulse is watching all requests on this tab</p>
+          </div>
+        </section>
+
+        <section class="detail-panel">
+          <div id="detailPlaceholder" class="detail-placeholder">
+            <h2>Select a failed request</h2>
+            <p>Request details, captured payloads, and AI analysis will appear here.</p>
+          </div>
+
+          <article id="detailView" class="detail-view hidden">
+            <div class="detail-head">
+              <div>
+                <div id="detailStatus" class="large-status">0</div>
+                <p id="detailStatusText"></p>
+              </div>
+              <div class="detail-meta">
+                <span id="detailMethod" class="method-badge">GET</span>
+                <span id="detailTime"></span>
+                <span id="detailDuration"></span>
+              </div>
+            </div>
+            <div id="detailUrl" class="detail-url"></div>
+            <div class="tabs" role="tablist">
+              <button class="tab-button active" data-tab="overview">Overview</button>
+              <button class="tab-button" data-tab="request">Request</button>
+              <button class="tab-button" data-tab="response">Response</button>
+              <button class="tab-button" data-tab="analysis">AI Analysis</button>
+            </div>
+
+            <section id="tab-overview" class="tab-panel active">
+              <div class="summary-card">
+                <h3>What happened</h3>
+                <p id="quickSummary">Select AI Analysis to generate an explanation.</p>
+              </div>
+            </section>
+
+            <section id="tab-request" class="tab-panel">
+              <details open>
+                <summary>Request Headers</summary>
+                <div id="requestHeaders"></div>
+              </details>
+              <div class="code-section">
+                <div class="code-head">
+                  <h3>Request Body</h3>
+                  <button class="copy-button" data-copy="requestBody">Copy</button>
+                </div>
+                <pre><code id="requestBody"></code></pre>
+              </div>
+            </section>
+
+            <section id="tab-response" class="tab-panel">
+              <details open>
+                <summary>Response Headers</summary>
+                <div id="responseHeaders"></div>
+              </details>
+              <div class="code-section">
+                <div class="code-head">
+                  <h3>Response Body</h3>
+                  <button class="copy-button" data-copy="responseBody">Copy</button>
+                </div>
+                <pre><code id="responseBody"></code></pre>
+              </div>
+            </section>
+
+            <section id="tab-analysis" class="tab-panel">
+              <div id="analysisMissingKey" class="notice hidden">
+                Add your Groq API key in settings to analyze this request.
+              </div>
+              <div id="analysisLoader" class="analysis-loader hidden">
+                <div class="skeleton"></div>
+                <div class="skeleton short"></div>
+                <div class="skeleton"></div>
+              </div>
+              <div id="analysisCards" class="analysis-grid"></div>
+              <form id="followupForm" class="followup-form">
+                <input id="followupInput" type="text" placeholder="Ask DebugPulse anything about this request">
+                <button class="primary-button" type="submit">Ask</button>
+              </form>
+              <div id="followupAnswer" class="followup-answer"></div>
+            </section>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script src="panel.js"></script>
+  </body>
+</html>

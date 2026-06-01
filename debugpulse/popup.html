@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DebugPulse</title>
+    <link rel="stylesheet" href="styles/panel.css">
+  </head>
+  <body class="popup-body">
+    <main class="popup-shell">
+      <header class="popup-header">
+        <img src="icons/icon48.png" alt="" class="brand-icon">
+        <div>
+          <h1>DebugPulse</h1>
+          <p id="activeState">Active</p>
+        </div>
+      </header>
+
+      <label class="toggle-row">
+        <span>Active / Paused</span>
+        <input id="pausedToggle" type="checkbox">
+      </label>
+
+      <section>
+        <h2>Recent failures</h2>
+        <div id="popupFailures" class="popup-failures"></div>
+      </section>
+
+      <button id="openDevtools" class="primary-button full-width">Open DevTools Panel</button>
+
+      <section class="popup-settings">
+        <h2>Settings</h2>
+        <input id="popupGroqKey" type="password" placeholder="Groq API key">
+        <button id="popupSaveKey" class="ghost-button full-width">Save</button>
+        <p id="popupStatus" class="settings-status"></p>
+      </section>
+
+      <footer>Watching <span id="requestCount">0</span> requests this session</footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
