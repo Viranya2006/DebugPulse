@@ -75,6 +75,11 @@ assert(panel.includes("conversationHistory"), "panel must maintain follow-up con
 assert(panel.includes("response_format"), "panel must request JSON object responses for structured analysis");
 assert(panel.includes("analysisError"), "panel must show the real AI analysis error instead of a generic key message");
 
+const css = read("styles/panel.css");
+assert(css.includes("height: 100vh"), "panel shell must use fixed viewport height for DevTools scrolling");
+assert(css.includes("overflow-y: auto"), "panel columns must allow vertical scrolling");
+assert(css.includes("scrollbar-gutter: stable"), "panel scroll containers must reserve scrollbar space");
+
 for (const jsFile of ["background.js", "content.js", "page-hook.js", "devtools.js", "panel.js", "popup.js"]) {
   const code = read(jsFile);
   new vm.Script(code, { filename: jsFile });
